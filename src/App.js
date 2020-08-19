@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import axios from "axios";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
+
+class App extends Component {
+  state = {};
+
+  componentDidMount() {
+    axios
+      .get(
+        // `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=NFLX&apikey=${API_KEY}`
+        `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=INTC&apikey=${API_KEY}`
+      )
+      .then((res) => {
+        console.log(res.data);
+      });
+  }
+  render() {
+    return (
+      <div className="App">
+        <h1>SHALOM</h1>
+      </div>
+    );
+  }
 }
 
 export default App;
