@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import OHLC from "./graph/ohlc";
+
 const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
 class Stocks extends Component {
   state = {
@@ -16,21 +18,35 @@ class Stocks extends Component {
       GOOGL: "",
       AMZN: "",
     },
+    data: [],
   };
 
-  onClickHandler = (event) => {
-    console.log(event.target.value);
-    axios
+  //Fetch data based on companay.
+  onClickHandler = async (event) => {
+    const companyName = event.target.value;
+    await axios
       .get(
-        `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${event.target.value}&apikey=${API_KEY}`
+        `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${companyName}&apikey=${API_KEY}`
       )
       .then((res) => {
-        console.log(res.data);
+        const data = res.data["Monthly Time Series"];
+
+        //Filter data by year
+        const arrYear = Object.keys(data)
+          .filter((v) => v.includes("2019"))
+          .map((key) => ({ ...data[key], date: key }));
+
+        this.setState({
+          data: arrYear,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
   render() {
-    console.log(this.state.stocks);
+    console.log(this.state.data);
 
     const individualStock = Object.keys(this.state.stocks).map((stock) => {
       return (
@@ -45,7 +61,15 @@ class Stocks extends Component {
       );
     });
 
-    return <div>{individualStock}</div>;
+    return (
+      <div>
+        {individualStock}
+
+        <div>
+          <OHLC data={this.state.data} />
+        </div>
+      </div>
+    );
   }
 }
 export default Stocks;
