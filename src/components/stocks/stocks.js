@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import OHLC from "./graph/ohlc";
+import "./stocks.css";
 
 const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
 class Stocks extends Component {
@@ -31,10 +32,10 @@ class Stocks extends Component {
       .then((res) => {
         const data = res.data["Monthly Time Series"];
 
-        //Filter data by year
+        //Filter data by year 2019
         const arrYear = Object.keys(data)
           .filter((v) => v.includes("2019"))
-          .map((key) => ({ ...data[key], date: key }));
+          .map((key) => ({ ...data[key], month: key.split("-")[1] }));
 
         this.setState({
           data: arrYear,
@@ -46,8 +47,6 @@ class Stocks extends Component {
   };
 
   render() {
-    console.log(this.state.data);
-
     const individualStock = Object.keys(this.state.stocks).map((stock) => {
       return (
         <button
@@ -55,6 +54,7 @@ class Stocks extends Component {
           key={stock}
           value={stock}
           onClick={this.onClickHandler}
+          className="stock-button"
         >
           {stock}
         </button>
@@ -62,10 +62,9 @@ class Stocks extends Component {
     });
 
     return (
-      <div>
-        {individualStock}
-
-        <div>
+      <div className="stocks-container">
+        <div className="button-container">{individualStock}</div>
+        <div className="chart-container">
           <OHLC data={this.state.data} />
         </div>
       </div>

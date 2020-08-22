@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import "./App.css";
-import OHLC from "./components/stocks/graph/ohlc";
-
+import Header from "./components/header/header";
 import Stocks from "./components/stocks/stocks";
+import Footer from "./components/footer/footer";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>SHALOM</h1>
+        <Header />
         <Stocks />
+        <Footer />
       </div>
     );
   }

@@ -1,0 +1,15 @@
+.header {
+  background-color: #d49a89;
+  padding: 20px;
+  color: white;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 35px;
+}
+
+.date {
+  font-size: 30px;
+  float: right;
+}

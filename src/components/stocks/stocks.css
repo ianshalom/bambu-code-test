@@ -1,6 +1,37 @@
-/* #chart {
-  width: 600px;
-  height: 450px;
+.stocks-container {
+  display: flex;
+  flex-direction: flex-row;
+  text-align: center;
+  margin: 40px;
+}
+
+/*  Buttons   */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
   margin: 0 auto;
-  border: 1px solid #000;
-} */
+}
+
+.stock-button {
+  padding: 15px;
+  font-size: 25px;
+  margin-bottom: 5px;
+  background-color: #2d4059;
+  letter-spacing: 2px;
+  font-weight: 600;
+  border-radius: 10px;
+  color: #f4f4f4;
+  font-family: "Barlow", sans-serif;
+}
+
+.stock-button:hover {
+  cursor: pointer;
+  background-color: #0f4c75;
+}
+
+/* Chart */
+.chart-container {
+  width: 70%;
+  margin: 0 auto;
+}
