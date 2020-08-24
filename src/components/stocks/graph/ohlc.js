@@ -93,7 +93,7 @@ class OHLC extends Component {
 
     context.lineWidth = 3;
     context.strokeStyle = "#333";
-    context.font = "italic 10pt sans-serif";
+    context.font = " 10pt Barlow";
     context.textAlign = "center";
 
     let { data } = this.props;

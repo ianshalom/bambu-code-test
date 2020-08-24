@@ -8,7 +8,7 @@
 .button-container {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 30%;
   margin: 0 auto;
   height: 100%;
@@ -24,6 +24,7 @@
   color: #f4f4f4;
   font-family: "Barlow", sans-serif;
   width: 100%;
+  margin: auto;
 }
 
 .stock-button:hover {
