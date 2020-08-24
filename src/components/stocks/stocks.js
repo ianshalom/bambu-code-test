@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import OHLC from "./graph/Ohlc";
 import "./Stocks.css";
+import Spinner from "../UI/Spinner";
 
 const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
 
@@ -22,11 +23,13 @@ class Stocks extends Component {
     ],
     data: [],
     newQuery: false,
+    isLoading: false,
   };
 
   //Fetch data based on companay.
   onClickHandler = async (event) => {
     const companyName = event.target.value;
+    this.isLoading();
     await axios
       .get(
         `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${companyName}&apikey=${API_KEY}`
@@ -53,11 +56,19 @@ class Stocks extends Component {
         this.setState({
           data: arrYear,
           newQuery: true,
+          isLoading: false,
         });
       })
       .catch((err) => {
         console.log(err);
+        this.setState({
+          isLoading: false,
+        });
       });
+  };
+
+  isLoading = () => {
+    this.setState({ isLoading: true });
   };
 
   resetData = () => {
@@ -80,7 +91,9 @@ class Stocks extends Component {
     });
 
     let ohlcGraph;
-    if (this.state.newQuery) {
+    if (this.state.isLoading) {
+      ohlcGraph = <Spinner />;
+    } else {
       ohlcGraph = <OHLC data={this.state.data} resetData={this.resetData} />;
     }
 
