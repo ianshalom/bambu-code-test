@@ -4,21 +4,22 @@ import OHLC from "./graph/ohlc";
 import "./stocks.css";
 
 const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
+
 class Stocks extends Component {
   state = {
-    stocks: {
-      MSFT: "",
-      AAPL: "",
-      INTC: "",
-      NFLX: "",
-      ORCL: "",
-      CMCSA: "",
-      GOOG: "",
-      LUV: "",
-      HOG: "",
-      GOOGL: "",
-      AMZN: "",
-    },
+    stocks: [
+      "MSFT",
+      "AAPL",
+      "INTC",
+      "NFLX",
+      "ORCL",
+      "CMCSA",
+      "GOOG",
+      "LUV",
+      "HOG",
+      "GOOGL",
+      "AMZN",
+    ],
     data: [],
   };
 
@@ -33,9 +34,16 @@ class Stocks extends Component {
         const data = res.data["Monthly Time Series"];
 
         //Filter data by year 2019
+        //Simplified key names and converted string values into numbers.
         const arrYear = Object.keys(data)
           .filter((v) => v.includes("2019"))
-          .map((key) => ({ ...data[key], month: key.split("-")[1] }));
+          .map((key) => ({
+            open: Number(data[key]["1. open"]),
+            high: Number(data[key]["2. high"]),
+            low: Number(data[key]["3. low"]),
+            close: Number(data[key]["4. close"]),
+            month: Number(key.split("-")[1]),
+          }));
 
         this.setState({
           data: arrYear,
@@ -47,7 +55,7 @@ class Stocks extends Component {
   };
 
   render() {
-    const individualStock = Object.keys(this.state.stocks).map((stock) => {
+    const individualStock = this.state.stocks.map((stock) => {
       return (
         <button
           type="submit"
@@ -65,7 +73,7 @@ class Stocks extends Component {
       <div className="stocks-container">
         <div className="button-container">{individualStock}</div>
         <div className="chart-container">
-          <OHLC data={this.state.data} />
+          {this.state.data.length ? <OHLC data={this.state.data} /> : null}
         </div>
       </div>
     );
