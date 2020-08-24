@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import OHLC from "./graph/ohlc";
-import "./stocks.css";
+import OHLC from "./graph/Ohlc";
+import "./Stocks.css";
 
 const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
 
@@ -21,6 +21,7 @@ class Stocks extends Component {
       "AMZN",
     ],
     data: [],
+    newQuery: false,
   };
 
   //Fetch data based on companay.
@@ -45,13 +46,22 @@ class Stocks extends Component {
             month: Number(key.split("-")[1]),
           }));
 
+        if (this.state.newQuery) {
+          this.resetData();
+        }
+
         this.setState({
           data: arrYear,
+          newQuery: true,
         });
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  resetData = () => {
+    this.setState({ data: [], newQuery: false });
   };
 
   render() {
@@ -69,12 +79,15 @@ class Stocks extends Component {
       );
     });
 
+    let ohlcGraph;
+    if (this.state.newQuery) {
+      ohlcGraph = <OHLC data={this.state.data} resetData={this.resetData} />;
+    }
+
     return (
       <div className="stocks-container">
         <div className="button-container">{individualStock}</div>
-        <div className="chart-container">
-          {this.state.data.length ? <OHLC data={this.state.data} /> : null}
-        </div>
+        <div className="chart-container">{ohlcGraph}</div>
       </div>
     );
   }
