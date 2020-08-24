@@ -31,6 +31,10 @@
   background-color: #158467;
 }
 
+.active {
+  background-color: #cedebd;
+}
+
 /* Chart */
 .chart-container {
   width: 70%;

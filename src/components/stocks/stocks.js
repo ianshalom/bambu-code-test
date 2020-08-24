@@ -5,30 +5,39 @@ import "./Stocks.css";
 import Spinner from "../UI/Spinner";
 
 const API_KEY = process.env.REACT_APP_ALPHA_API_KEY;
-
+const YEAR = 2019;
+const STOCKS = [
+  "MSFT",
+  "AAPL",
+  "INTC",
+  "NFLX",
+  "ORCL",
+  "CMCSA",
+  "GOOG",
+  "LUV",
+  "HOG",
+  "GOOGL",
+  "AMZN",
+];
 class Stocks extends Component {
   state = {
-    stocks: [
-      "MSFT",
-      "AAPL",
-      "INTC",
-      "NFLX",
-      "ORCL",
-      "CMCSA",
-      "GOOG",
-      "LUV",
-      "HOG",
-      "GOOGL",
-      "AMZN",
-    ],
     data: [],
     newQuery: false,
     isLoading: false,
+    currentStock: null,
   };
 
+  componentDidMount() {
+    const currentStock = localStorage.getItem("currentStock");
+    if (currentStock) {
+      this.fetchCompanyData(currentStock);
+    }
+  }
+
   //Fetch data based on company clicked.
-  onClickHandler = async (event) => {
-    const companyName = event.target.value;
+  fetchCompanyData = async (companyName) => {
+    this.setState({ currentStock: companyName });
+
     this.isLoading();
     await axios
       .get(
@@ -36,11 +45,11 @@ class Stocks extends Component {
       )
       .then((res) => {
         const data = res.data["Monthly Time Series"];
-
+        localStorage.setItem("currentStock", companyName);
         //Filter data by year 2019
         //Simplified key names and converted string values into numbers.
         const arrYear = Object.keys(data)
-          .filter((v) => v.includes("2019"))
+          .filter((v) => v.includes(YEAR))
           .map((key) => ({
             open: Number(data[key]["1. open"]),
             high: Number(data[key]["2. high"]),
@@ -60,7 +69,7 @@ class Stocks extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         this.setState({
           isLoading: false,
         });
@@ -76,14 +85,18 @@ class Stocks extends Component {
   };
 
   render() {
-    const individualStock = this.state.stocks.map((stock) => {
+    const individualStock = STOCKS.map((stock) => {
       return (
         <button
           type="submit"
           key={stock}
           value={stock}
-          onClick={this.onClickHandler}
-          className="stock-button"
+          onClick={(event) => {
+            this.fetchCompanyData(event.target.value);
+          }}
+          className={`stock-button ${
+            stock === this.state.currentStock && "active"
+          }`}
         >
           {stock}
         </button>
@@ -100,6 +113,17 @@ class Stocks extends Component {
     return (
       <div className="stocks-container">
         <div className="button-container">{individualStock}</div>
+        {!this.state.currentStock && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            Select a stock to view its data.
+          </div>
+        )}
         <div className="chart-container">{ohlcGraph}</div>
       </div>
     );
