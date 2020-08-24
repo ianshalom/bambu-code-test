@@ -26,7 +26,7 @@ class Stocks extends Component {
     isLoading: false,
   };
 
-  //Fetch data based on companay.
+  //Fetch data based on company clicked.
   onClickHandler = async (event) => {
     const companyName = event.target.value;
     this.isLoading();

@@ -8,18 +8,19 @@
 .button-container {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   width: 30%;
   margin: 0 auto;
+  height: 100%;
 }
 
 .stock-button {
-  padding: 15px;
+  padding: 19.77px;
   font-size: 25px;
-  margin-bottom: 5px;
-  background-color: #2d4059;
+  background-color: #91d18b;
+  border: 1px solid white;
   letter-spacing: 2px;
   font-weight: 600;
-  border-radius: 10px;
   color: #f4f4f4;
   font-family: "Barlow", sans-serif;
   width: 100%;
@@ -27,7 +28,7 @@
 
 .stock-button:hover {
   cursor: pointer;
-  background-color: #0f4c75;
+  background-color: #158467;
 }
 
 /* Chart */

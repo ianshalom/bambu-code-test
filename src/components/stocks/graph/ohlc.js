@@ -84,6 +84,24 @@ class OHLC extends Component {
     }
   }
 
+  // Set Y-axis labels to be dynamic
+  yValues(maxVal, minVal) {
+    let count;
+    let difference = maxVal - minVal;
+    if (difference < 50) {
+      count = 10;
+    } else if (difference <= 100) {
+      count = 20;
+    } else if (difference < 200) {
+      count = 50;
+    } else if (difference < 500) {
+      count = 100;
+    } else {
+      count = 200;
+    }
+    return count;
+  }
+
   //Initialise Canvas
   canvasInit() {
     let graph;
@@ -95,15 +113,13 @@ class OHLC extends Component {
     console.log(this.props.data);
 
     let chartInfo = {
-      y: { min: minVal - 10, max: maxVal + 10 },
+      y: { min: minVal, max: maxVal },
+      x: { labels: this.getLabels() },
     };
-
-    //Labels (x axis)
-    let labels = this.getLabels();
 
     context.lineWidth = 3;
     context.strokeStyle = "#333";
-    context.font = "italic 8pt sans-serif";
+    context.font = "italic 10pt sans-serif";
     context.textAlign = "center";
 
     let data = this.props.data;
@@ -135,10 +151,10 @@ class OHLC extends Component {
     }
 
     // Draw the X value texts
-    for (var i = 0; i < labels.length; i++) {
+    for (var i = 0; i < chartInfo.x.labels.length; i++) {
       context.fillText(
-        this.convertMonth(labels[i].x),
-        getXPixel(labels[i].x),
+        this.convertMonth(chartInfo.x.labels[i].x),
+        getXPixel(chartInfo.x.labels[i].x),
         height - CHART_PADDING + 20
       );
     }
@@ -147,28 +163,12 @@ class OHLC extends Component {
     context.textAlign = "right";
     context.textBaseline = "middle";
 
-    // Set Y-axis labels to be dynamic
-    let count;
-    let difference = maxVal - minVal;
-    if (difference < 50) {
-      count = 10;
-    } else if (difference <= 100) {
-      count = 20;
-    } else if (difference < 200) {
-      count = 50;
-    } else if (difference < 500) {
-      count = 100;
-    } else {
-      count = 200;
-    }
-
-    for (var j = 0; j < maxVal; j += count) {
-      context.fillText("$ " + j, CHART_PADDING + 4, getYPixel(j));
+    for (var j = 0; j < maxVal; j += this.yValues(maxVal, minVal)) {
+      context.fillText("$ " + j, CHART_PADDING + 15, getYPixel(j));
     }
 
     for (let i = 0; i < data.length; i++) {
       openY = (data[i].open - chartInfo.y.min) * stepSize;
-
       //Determines whether market is bullish or bearish
       closeYOffset = (data[i].open - data[i].close) * stepSize;
       highY = (data[i].high - chartInfo.y.min) * stepSize;
@@ -187,12 +187,17 @@ class OHLC extends Component {
       context.strokeStyle = closeYOffset < 0 ? "#C2D985" : "#E3675C";
       context.stroke();
     }
-
-    // console.log(this.props.data);
   }
 
   render() {
-    return <canvas width="900" height="700" id="graph"></canvas>;
+    return (
+      <canvas
+        width="1050"
+        height="750"
+        id="graph"
+        style={{ padding: "10px" }}
+      ></canvas>
+    );
   }
 }
 
