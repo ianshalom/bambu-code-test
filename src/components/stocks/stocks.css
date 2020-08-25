@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: flex-row;
   text-align: center;
+  height: 80%;
 }
 
 /*  Buttons   */
@@ -9,35 +10,51 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30%;
-  margin: 0 auto;
-  height: 100%;
+  width: 25%;
 }
 
 .stock-button {
-  padding: 19.77px;
+  padding: 20px;
   font-size: 25px;
-  background-color: #91d18b;
+  background-color: #cedebd;
   border: 1px solid white;
   letter-spacing: 2px;
   font-weight: 600;
-  color: #f4f4f4;
+  color: #767c77;
   font-family: "Barlow", sans-serif;
   width: 100%;
   margin: auto;
+  height: 100%;
+}
+
+button {
+  height: 90px;
 }
 
 .stock-button:hover {
   cursor: pointer;
-  background-color: #158467;
+  background-color: #99b898;
 }
 
 .active {
-  background-color: #cedebd;
+  background-color: #99b898;
 }
 
 /* Chart */
 .chart-container {
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .stocks-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .button-container {
+    width: 100%;
+  }
+  .chart-container {
+    width: 100%;
+  }
 }

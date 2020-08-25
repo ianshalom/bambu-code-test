@@ -6,10 +6,22 @@
 }
 
 .title {
-  font-size: 35px;
+  font-size: 30px;
+}
+
+.bambu {
+  float: left;
+  font-size: 30px;
 }
 
 .date {
   font-size: 30px;
   float: right;
+}
+
+@media (max-width: 768px) {
+  .header {
+    display: flex;
+    flex-direction: column;
+  }
 }
